@@ -1,0 +1,12 @@
+@{
+    
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Username: @ViewBag.username</p>
+<ul>Fruits:
+    @foreach (var fruit in ViewBag.fruits)
+    {
+        <li>@fruit</li>
+    }
+</ul>
