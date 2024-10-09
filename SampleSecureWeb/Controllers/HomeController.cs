@@ -15,12 +15,13 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        ViewBag.username=User.Identity.Name;
         return View();
     }
         public IActionResult About()
     {
         ViewData["Title"] = "About Page";
-        ViewBag.username="filbert";
+        ViewBag.username=User.Identity.Name;
         string[] fruits = new string[]{"Apple","Banana","Orange"};
         ViewBag.fruits = fruits;
         return View();

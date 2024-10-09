@@ -1,0 +1,36 @@
+﻿@model SampleSecureWeb.ViewModel.LoginViewModel
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <form asp-action="Login">
+                    
+                    <!-- Username Input -->
+                    <div class="form-group">
+                        <input asp-for="Username" class="form-control form-control-user" placeholder="Username" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    
+                    <!-- Password Input -->
+                    <div class="form-group">
+                        <input asp-for="Password" class="form-control form-control-user" placeholder="Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <!-- Remember Me Checkbox -->
+                    <div class="form-group">
+                        <label asp-for="RememberLogin" class="form-check-label">
+                            <input asp-for="RememberLogin" class="form-check-input" />
+                            <strong>Remember Me</strong>
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Login" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
