@@ -1,26 +1,22 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace SampleSecureWeb.ViewModel;
+using System.ComponentModel.DataAnnotations;
 
 public class ChangePasswordViewModel
 {
-     [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "Current Password")]
+    [Required(ErrorMessage = "Current password is required.")]
         public string CurrentPassword { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "New password is required.")]
         [DataType(DataType.Password)]
-        [MinLength(12, ErrorMessage = "The new password must be at least 12 characters long.")]
-        [RegularExpression(@"^(?=.*[!@#$%^&*(),.?""{}|<>])[A-Za-z\d!@#$%^&*(),.?""{}|<>]{12,}$", 
-            ErrorMessage = "New password must contain at least one special character.")]
-        [Display(Name = "New Password")]
+        [MinLength(12, ErrorMessage = "The password must be at least 12 characters long.")]
+        [RegularExpression(@"(?=.[A-Z])(?=.[a-z])(?=.\d)(?=.[!@#$%^&(),.?""{}|<>])[A-Za-z\d!@#$%^&(),.?""{}|<>]{12,}$", 
+            ErrorMessage = "The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.")]
         public string NewPassword { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Please confirm your new password.")]
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm New Password")]
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmNewPassword { get; set; } = string.Empty;
 }

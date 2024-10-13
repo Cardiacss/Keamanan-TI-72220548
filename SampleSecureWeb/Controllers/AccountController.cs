@@ -2,6 +2,7 @@ using System.Net;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query;
@@ -95,39 +96,32 @@ namespace SampleSecureWeb.Controllers
             }
             return View(loginviewmodel);
         }
-         [HttpGet]
-    public IActionResult ChangePassword()
-    {
-        return View();
-    }
 
-    [HttpPost]
-    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-    {
-        if (ModelState.IsValid)
+        [Authorize]
+        public IActionResult ChangePassword()
         {
-            var user = await _userData.GetUserAsync(User);
-            if (user != null)
-            {
-                var result = await _userData.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("ChangePasswordConfirmation");
-                }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
-            ModelState.AddModelError(string.Empty, "An error occurred while changing the password.");
+            return View();
         }
-        return View(model);
-    }
 
-    public IActionResult ChangePasswordConfirmation()
-    {
-        return View();
-    }
+        // POST: /Account/ChangePassword
+        [HttpPost]
+        [Authorize]
+        public IActionResult ChangePassword(ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _userData.login(new User { Username = User.Identity.Name, Password = model.CurrentPassword });
+                
+                if (user != null)
+                {
+                    user.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+                    _userData.UpdatePassword(user); // Implement this method in IUser
+                    return RedirectToAction("Index", "Home");
+                }
 
+                ModelState.AddModelError(string.Empty, "Current password is incorrect.");
+            }
+            return View(model);
+        }
     }
 }

@@ -41,5 +41,19 @@ public class UserData : IUser
             throw new Exception(ex.Message);
         }
     }
+
+    public void UpdatePassword(User user)
+{
+    var existingUser = _db.Users.FirstOrDefault(u => u.Username == user.Username);
+    if (existingUser != null)
+    {
+        existingUser.Password = user.Password;
+        _db.SaveChanges();
+    }
+    else
+    {
+        throw new Exception("User not found");
+    }
+}
 }
 
